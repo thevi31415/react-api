@@ -1,7 +1,59 @@
 import React, { useState, useEffect } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import logo from "./logo.svg"; // Adjust the import path as necessary
 import "./App.css"; // Adjust the import path as necessary
-
+import {
+  Container,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+// Tạo theme với màu sắc tươi sáng
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#4caf50",
+    },
+    secondary: {
+      main: "#ffeb3b",
+    },
+    background: {
+      default: "#f5f5f5",
+    },
+  },
+  typography: {
+    h6: {
+      fontWeight: "bold",
+      color: "#ffffff",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          margin: "10px 0",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffffff",
+        },
+      },
+    },
+  },
+});
 function App() {
   const [data, setData] = useState(null); // State to hold the fetched data
   const [error, setError] = useState(null); // State to hold any error that occurs during fetching
@@ -95,54 +147,80 @@ function App() {
   };
 
   return (
-    <>
-      <meta
-        httpEquiv="Content-Security-Policy"
-        content="upgrade-insecure-requests"
-      ></meta>
-
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1>Data from API: {process.env.REACT_APP_API}</h1>
+    <ThemeProvider theme={theme}>
+      <Container
+        style={{
+          padding: "20px",
+          backgroundColor: theme.palette.background.default,
+          borderRadius: "8px",
+        }}
+      >
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography variant="h6">
+              Data from API: {process.env.REACT_APP_API}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <header className="App-header" style={{ marginTop: "20px" }}>
           {error ? (
-            <p>Error: {error}</p>
+            <Alert severity="error">Error: {error}</Alert>
           ) : data ? (
             <>
-              <ul>
+              <List>
                 {data.map((item) => (
-                  <li key={item.id}>
-                    {item.maLoai} - {item.tenLoai}
-                    <button onClick={() => deleteItem(item.maLoai)}>
-                      Delete
-                    </button>
-                    <button
-                      onClick={() =>
-                        updateItem(
-                          item.maLoai,
-                          prompt("New name:", item.tenLoai)
-                        )
-                      }
-                    >
-                      Update
-                    </button>
-                  </li>
+                  <ListItem
+                    key={item.id}
+                    secondaryAction={
+                      <>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          color="secondary"
+                          onClick={() => deleteItem(item.maLoai)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          aria-label="edit"
+                          color="primary"
+                          onClick={() =>
+                            updateItem(
+                              item.maLoai,
+                              prompt("New name:", item.tenLoai)
+                            )
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                    }
+                  >
+                    <ListItemText
+                      primary={`${item.maLoai} - ${item.tenLoai}`}
+                    />
+                  </ListItem>
                 ))}
-              </ul>
-              <input
-                type="text"
+              </List>
+              <TextField
+                label="New item"
+                variant="outlined"
                 value={newItem}
                 onChange={(e) => setNewItem(e.target.value)}
-                placeholder="New item"
+                fullWidth
+                margin="normal"
               />
-              <button onClick={addItem}>Add Item</button>
+              <Button variant="contained" color="primary" onClick={addItem}>
+                Add Item
+              </Button>
             </>
           ) : (
-            <p>Loading...</p>
+            <CircularProgress color="primary" />
           )}
         </header>
-      </div>
-    </>
+      </Container>
+    </ThemeProvider>
   );
 }
 
