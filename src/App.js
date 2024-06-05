@@ -24,23 +24,30 @@ function App() {
   }, []); // Empty dependency array ensures useEffect only runs once after initial render
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Data from ffAPI: {process.env.REACT_APP_API}</h1>
-        {error ? (
-          <p>Error: {error}</p>
-        ) : data ? (
-          <ul>
-            {data.map((item, index) => (
-              <li key={index}>{item.tenLoai}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </header>
-    </div>
+    <>
+      <meta
+        http-equiv="Content-Security-Policy"
+        content="upgrade-insecure-requests"
+      ></meta>
+
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1>Data from ffAPI: {process.env.REACT_APP_API}</h1>
+          {error ? (
+            <p>Error: {error}</p>
+          ) : data ? (
+            <ul>
+              {data.map((item, index) => (
+                <li key={index}>{item.tenLoai}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </header>
+      </div>
+    </>
   );
 }
 
