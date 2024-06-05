@@ -7,9 +7,7 @@ function App() {
   const [error, setError] = useState(null); // State to hold any error that occurs during fetching
 
   useEffect(() => {
-    fetch(
-      "http://api3-env.eba-u35ryfqx.us-east-1.elasticbeanstalk.com/api/Loai"
-    )
+    fetch(process.env.REACT_APP_API + "/api/loai")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -29,7 +27,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>Data from API:</h1>
+        <h1>Data from ffAPI: {process.env.REACT_APP_API}</h1>
         {error ? (
           <p>Error: {error}</p>
         ) : data ? (
